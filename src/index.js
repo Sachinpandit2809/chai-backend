@@ -5,7 +5,15 @@ import dbConnect from "./db/db_connect.js";
 dotenv.config({path: './.env'});
 
 
-dbConnect();
+dbConnect().then(()=>{
+    app.on("error", (error) => {
+        console.error("App not able to connect ",error);
+        throw error;
+      });
+    app.listen(process.env.PORT||8000, () => {
+        console.log(`App is running on ${process.env.PORT}`);
+      });
+}).catch(error=>console.error("MONGO_DB_CONNECTION_FAILED  ",error));
 
 
 
